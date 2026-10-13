@@ -1,19 +1,19 @@
-# 🎰 VIP Stake Telegram Bot
+# ⭐ VIP Stake Telegram Bot
 
-A Telegram bot for VIP staking, rewards, and tier management.
-Deployed on Railway via GitHub.
+Earn loyalty points, unlock VIP tiers, and enjoy exclusive member perks — all inside Telegram.
+Non-gambling. Community-friendly. Deployed via GitHub + Railway.
 
 ## Features
-- Stake tokens
-- VIP tier tracking
-- Daily bonuses
+- Daily check-in rewards
+- VIP tier progression (Starter → Platinum)
+- Perks viewer
+- Fast, always-on (Railway)
 
 ## Deploy on Railway
-1. Fork / push this repo to GitHub.
-2. Go to [Railway](https://railway.app) → **New Project** → **Deploy from GitHub**.
-3. Select this repo.
-4. Add environment variable: `BOT_TOKEN=your_token`.
-5. Deploy 🚀
+1. Push this repo to GitHub.
+2. Railway → **New Project** → **Deploy from GitHub**.
+3. Add variable: `BOT_TOKEN=your_token`.
+4. Deploy 🚀
 
 ## Local Run
 ```bash
