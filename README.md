@@ -1,17 +1,16 @@
-# ⭐ VIP Stake Telegram Bot
+# ⭐ VIP Rewards Telegram Bot
 
-Earn loyalty points, unlock VIP tiers, and enjoy exclusive member perks — all inside Telegram.
-Non-gambling. Community-friendly. Deployed via GitHub + Railway.
+Earn points, unlock VIP levels, and enjoy exclusive member perks
+Simple, friendly, and non-gambling.
 
 ## Features
-- Daily check-in rewards
-- VIP tier progression (Starter → Platinum)
-- Perks viewer
-- Fast, always-on (Railway)
+- Daily reward claim
+- VIP level progression (Member → Platinum)
+- Points tracking
 
 ## Deploy on Railway
 1. Push this repo to GitHub.
-2. Railway → **New Project** → **Deploy from GitHub**.
+2. Railway → New Project → Deploy from GitHub.
 3. Add variable: `BOT_TOKEN=your_token`.
 4. Deploy 🚀
 
