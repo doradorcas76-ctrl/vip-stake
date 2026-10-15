@@ -49,8 +49,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     await update.message.reply_text(
         "⭐ *Welcome to VIP Rewards Bot!*\n\n"
-        "Claim your daily reward, earn points, and unlock VIP levels — "
-        "all right here in Telegram.\n\n"
+        "Claim your daily reward, earn points, and unlock VIP levels\n\n"
         "Tap an option below 👇",
         parse_mode="Markdown",
         reply_markup=InlineKeyboardMarkup(keyboard),
