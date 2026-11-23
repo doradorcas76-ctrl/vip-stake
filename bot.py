@@ -1,62 +1,49 @@
 import os
-import hashlib
-from datetime import date
-import telebot
-from dotenv import load_dotenv
+import logging
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-load_dotenv()
-BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-bot = telebot.TeleBot(BOT_TOKEN)
+# Enable logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
 
-# Simple in-memory storage (resets on redeploy, suitable for demo)
-user_data = {}
-
-def get_code(user_id: int, today: date) -> str:
-    """Generate non-financial participation code."""
-    raw = f"{user_id}-{today.isoformat()}-stakebot"
-    return hashlib.sha256(raw.encode()).hexdigest()[:8].upper()
-
-@bot.message_handler(commands=['start'])
-def cmd_start(message):
-    uid = message.from_user.id
-    today = date.today()
-    user_data.setdefault(uid, {'streak': 0, 'last': None})
-    user_data[uid]['last'] = today
-    code = get_code(uid, today)
-    text = (
-        f"👋 Hello, {message.from_user.first_name}!\n\n"
-        f"Your participation code for {today.isoformat()}:\n"
-        f"`{code}`\n\n"
-        f"This code is for personal recording only and has no monetary value.\n"
-        f"Use /status to view your streak."
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # A simple menu compliant with Telegram Ads requirements (no external links)
+    await update.message.reply_text(
+        "⚽ **Sports Score Bot**\n\n"
+        "Use the commands below to check scores:\n"
+        "/score - Get a sample live score update\n"
+        "/help - Show this message\n\n"
+        "Note: This bot provides simulated data for demonstration and does not link to gambling or third-party sites.",
+        parse_mode='Markdown'
     )
-    bot.reply_to(message, text, parse_mode='Markdown')
 
-@bot.message_handler(commands=['status'])
-def cmd_status(message):
-    uid = message.from_user.id
-    today = date.today()
-    data = user_data.get(uid, {'streak': 0, 'last': None})
-    if data['last']:
-        delta = (today - data['last']).days
-        if delta == 1:
-            data['streak'] += 1
-        elif delta > 1:
-            data['streak'] = 1
-    else:
-        data['streak'] = 1
-    data['last'] = today
-    user_data[uid] = data
-    bot.reply_to(message, f"📊 Streak: {data['streak']} day(s)\nLast active: {today.isoformat()}\n\nThis is a personal habit record only.")
-
-@bot.message_handler(commands=['help'])
-def cmd_help(message):
-    bot.reply_to(message, "Commands:\n/start - Get today's participation code\n/status - View streak\n/help - This message\n\nNo betting, no money, no prizes involved.")
-
-@bot.message_handler(func=lambda m: True)
-def fallback(message):
-    bot.reply_to(message, "Please use /start, /status, or /help.")
+async def score(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Simulated simple function. In a real scenario, you would fetch from an API here.
+    # Keeping it simple and self-contained ensures the bot always responds (Ads requirement).
+    await update.message.reply_text(
+        "🏀 **NBA (Sample)**\n"
+        "Lakers 102 - 98 Celtics (Q4 - 02:15)\n\n"
+        "⚾ **MLB (Sample)**\n"
+        "Yankees 3 - 1 Red Sox (Top 7th)\n\n"
+        "⚽ **EPL (Sample)**\n"
+        "Arsenal 2 - 2 Liverpool (FT)\n\n"
+        "_Data is simulated for demonstration._"
+    )
 
 if __name__ == '__main__':
-    print("StakeBot is running...")
-    bot.infinity_polling()
+    # Railway uses the PORT environment variable, but for polling, we just need the token.
+    TOKEN = os.environ.get("BOT_TOKEN")
+    if not TOKEN:
+        raise ValueError("No BOT_TOKEN found in environment variables.")
+        
+    application = ApplicationBuilder().token(TOKEN).build()
+
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("help", start))
+    application.add_handler(CommandHandler("score", score))
+
+    # Run the bot (Polling mode works well on Railway for simple bots)
+    application.run_polling()
